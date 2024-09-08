@@ -1,0 +1,97 @@
+﻿@page "/put-todo"
+@inject HttpClient Http
+@inject IJSRuntime jsRuntime
+
+@using System.Text
+@using System.Text.Json
+
+<link rel="stylesheet" href="css/put.css">
+
+<div class="container">
+    <h1>Update Todo</h1>
+    <EditForm Model="@todoModel" OnValidSubmit="UpdateTodo">
+        <label for="todoId">Todo ID</label>
+        <InputText id="todoId" @bind-Value="todoModel.TodoId" required />
+
+        <label for="todoDay">Day</label>
+        <InputText id="todoDay" @bind-Value="todoModel.Day" required />
+
+        <label for="todoNote">Note</label>
+        <InputText id="todoNote" @bind-Value="todoModel.Note" required />
+
+        <label for="detailCount">Detail Count</label>
+        <InputNumber id="detailCount" @bind-Value="todoModel.DetailCount" required />
+
+        <div id="todoDetailsContainer">
+            <label>Todo Details</label>
+            @foreach (var detail in todoModel.TodoDetails)
+            {
+                <div class="todoDetail">
+                    <label>Activity</label>
+                    <InputText @bind-Value="detail.Activity" required />
+
+                    <label>Category</label>
+                    <InputText @bind-Value="detail.Category" required />
+
+                    <label>Detail Note</label>
+                    <InputTextArea @bind-Value="detail.DetailNote" required />
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="btn">Update Todo</button>
+    </EditForm>
+
+    <p>@errorMessage</p>
+</div>
+
+@code {
+    private TodoModel todoModel = new TodoModel();
+    private string errorMessage = string.Empty;
+
+    public class TodoModel
+    {
+        public string? TodoId { get; set; }
+        public string? Day { get; set; }
+        public DateTime TodayDate { get; set; } = DateTime.Now;
+        public string? Note { get; set; }
+        public int DetailCount { get; set; }
+        public List<TodoDetailModel> TodoDetails { get; set; } = new List<TodoDetailModel>
+    {
+            new TodoDetailModel()
+        };
+    }
+
+    public class TodoDetailModel
+    {
+        public string? TodoDetailId { get; set; }
+        public string? Activity { get; set; }
+        public string? Category { get; set; }
+        public string? DetailNote { get; set; }
+    }
+
+    private async Task UpdateTodo()
+    {
+        var token = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "jwtToken");
+        if (string.IsNullOrEmpty(token))
+        {
+            errorMessage = "JWT token not found. Please log in again.";
+            return;
+        }
+
+        var request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:7059/api/v1/todo/{todoModel.TodoId}");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        request.Content = new StringContent(JsonSerializer.Serialize(todoModel), Encoding.UTF8, "application/json");
+
+        var response = await Http.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            errorMessage = "Todo updated successfully.";
+        }
+        else
+        {
+            errorMessage = $"Failed to update todo. Status Code: {response.StatusCode}";
+        }
+    }
+}

@@ -1,0 +1,52 @@
+﻿<Properties StartupConfiguration="{DA2D7CE1-2F4E-4894-9344-63740DA61289}|https">
+  <MonoDevelop.Ide.Workbench ActiveDocument="BlazerCRUDFrontend/Pages/DeleteTodo.razor">
+    <Files>
+      <File FileName="BlazerCRUDFrontend/Pages/Dashboard.razor" Line="45" Column="1" />
+      <File FileName="BlazerCRUDFrontend/App.razor" Line="11" Column="22" />
+      <File FileName="BlazerCRUDFrontend/Shared/NavMenu.razor" Line="40" Column="1" />
+      <File FileName="BlazerCRUDFrontend/Pages/GetTodos.razor" Line="41" Column="13" />
+      <File FileName="BlazerCRUDFrontend/Pages/Login.razor" Line="34" Column="46" />
+      <File FileName="BlazerCRUDFrontend/wwwroot/localstoragehelper.js" Line="1" Column="30" />
+      <File FileName="BlazerCRUDFrontend/wwwroot/index.html" Line="17" Column="38" />
+      <File FileName="BlazerCRUDFrontend/Program.cs" Line="12" Column="1" />
+      <File FileName="BlazerCRUDFrontend/wwwroot/css/styles.css" Line="82" Column="1" />
+      <File FileName="BlazerCRUDFrontend/wwwroot/css/dashboard.css" Line="45" Column="1" />
+      <File FileName="BlazerCRUDFrontend/wwwroot/css/get.css" Line="72" Column="1" />
+      <File FileName="BlazerCRUDFrontend/Shared/MainLayout.razor" Line="19" Column="1" />
+      <File FileName="BlazerCRUDFrontend/_Imports.razor" Line="1" Column="1" />
+      <File FileName="BlazerCRUDFrontend/Pages/PostData.razor" Line="122" Column="1" />
+      <File FileName="BlazerCRUDFrontend/wwwroot/css/post.css" Line="36" Column="1" />
+      <File FileName="BlazerCRUDFrontend/Pages/PutTodo.razor" Line="16" Column="41" />
+      <File FileName="BlazerCRUDFrontend/wwwroot/css/put.css" Line="84" Column="1" />
+      <File FileName="BlazerCRUDFrontend/Pages/DeleteTodo.razor" Line="57" Column="1" />
+      <File FileName="BlazerCRUDFrontend/wwwroot/css/delete.css" Line="73" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="BlazerCRUDFrontend" expanded="True">
+            <Node name="BlazerCRUDFrontend" expanded="True">
+              <Node name="Pages" expanded="True">
+                <Node name="DeleteTodo.razor" selected="True" />
+              </Node>
+              <Node name="Shared" expanded="True" />
+              <Node name="wwwroot" expanded="True">
+                <Node name="css" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.BlazerCRUDFrontend PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+</Properties>

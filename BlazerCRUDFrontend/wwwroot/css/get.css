@@ -1,0 +1,71 @@
+﻿/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: url('get.webp') 15 15, auto;
+}
+
+body {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    background-size: cover;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button {
+    padding: 0.75rem;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+    button:hover {
+        background-color: #444;
+        transform: scale(1.05);
+    }
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #333;
+    color: white;
+}
+
+td {
+    background-color: #f9f9f9;
+}

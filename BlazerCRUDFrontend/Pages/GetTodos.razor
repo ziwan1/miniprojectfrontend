@@ -1,0 +1,78 @@
+﻿@page "/get-todo"
+@inject HttpClient Http
+@inject IJSRuntime jsRuntime
+
+<link rel="stylesheet" href="css/get.css">
+
+<div id="background-scroll"></div>
+
+<div class="container">
+    <h1>Fetch Todos</h1>
+    <EditForm Model="@paginationModel" OnValidSubmit="FetchTodos">
+        <label for="pageNumber">Page Number:</label>
+        <InputNumber id="pageNumber" @bind-Value="paginationModel.PageNumber" min="1" required />
+
+        <label for="pageSize">Page Size:</label>
+        <InputNumber id="pageSize" @bind-Value="paginationModel.PageSize" min="1" required />
+
+        <button type="submit">Fetch Todos</button>
+    </EditForm>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Today Date</th>
+                <th>Note</th>
+                <th>Detail Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var todo in Todos)
+            {
+                <tr>
+                    <td>@todo.Day</td>
+                    <td>@todo.TodayDate.ToString("MM/dd/yyyy")</td>
+                    <td>@todo.Note</td>
+                    <td>@todo.DetailCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private PaginationModel paginationModel = new PaginationModel { PageNumber = 1, PageSize = 10 };
+    private List<Todo> Todos = new();
+
+    private async Task FetchTodos()
+    {
+        var token = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "jwtToken");
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:7059/api/v1/todo?pageNumber={paginationModel.PageNumber}&pageSize={paginationModel.PageSize}");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Http.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                Todos = await response.Content.ReadFromJsonAsync<List<Todo>>();
+            }
+        }
+    }
+
+    public class PaginationModel
+    {
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+    }
+
+    public class Todo
+    {
+        public string? Day { get; set; }
+        public DateTime TodayDate { get; set; }
+        public string? Note { get; set; }
+        public int DetailCount { get; set; }
+    }
+}

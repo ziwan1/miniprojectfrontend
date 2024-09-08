@@ -1,0 +1,44 @@
+﻿@page "/dashboard"
+
+<div class="dashboard-container">
+    <div class="crud-quarter" @onclick="NavigateToGetTodo">
+        <h2>GET Data</h2>
+        <p>Retrieve data from the database</p>
+    </div>
+    <div class="crud-quarter" @onclick="NavigateToPostTodo">
+        <h2>POST Data</h2>
+        <p>Add new data to the database</p>
+    </div>
+    <div class="crud-quarter" @onclick="NavigateToPutTodo">
+        <h2>PUT Data</h2>
+        <p>Update existing data</p>
+    </div>
+    <div class="crud-quarter" @onclick="NavigateToDeleteTodo">
+        <h2>DELETE Data</h2>
+        <p>Remove data from the database</p>
+    </div>
+</div>
+
+@code {
+    [Inject] private NavigationManager NavigationManager { get; set; }
+
+    private void NavigateToGetTodo()
+    {
+        NavigationManager.NavigateTo("/get-todo");
+    }
+
+    private void NavigateToPostTodo()
+    {
+        NavigationManager.NavigateTo("/post-todo");
+    }
+
+    private void NavigateToPutTodo()
+    {
+        NavigationManager.NavigateTo("/put-todo");
+    }
+
+    private void NavigateToDeleteTodo()
+    {
+        NavigationManager.NavigateTo("/delete-todo");
+    }
+}

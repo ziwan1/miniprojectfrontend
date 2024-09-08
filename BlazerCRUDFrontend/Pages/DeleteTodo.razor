@@ -1,0 +1,56 @@
+﻿@page "/delete-todo"
+@inject HttpClient Http
+@inject IJSRuntime jsRuntime
+
+<div class="container">
+    <h1>Delete Todo</h1>
+    <EditForm Model="@deleteModel" OnValidSubmit="PerformDeleteTodo">
+        <div class="form-group">
+            <label for="todoId">Todo ID</label>
+            <InputText id="todoId" @bind-Value="deleteModel.TodoId" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn">Delete Todo</button>
+    </EditForm>
+
+    <div class="error-message">
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p>@errorMessage</p>
+        }
+    </div>
+</div>
+
+@code {
+    private DeleteTodoModel deleteModel = new DeleteTodoModel();
+    private string? errorMessage;
+
+    private async Task PerformDeleteTodo()
+    {
+        var token = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "jwtToken");
+        if (string.IsNullOrEmpty(token))
+        {
+            errorMessage = "JWT token not found. Please log in again.";
+            return;
+        }
+
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:7059/api/v1/todo/{deleteModel.TodoId}");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Http.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            errorMessage = "Todo deleted successfully.";
+        }
+        else
+        {
+            errorMessage = $"Failed to delete todo. Status Code: {response.StatusCode}";
+        }
+    }
+
+    public class DeleteTodoModel
+    {
+        public string TodoId { get; set; } = string.Empty;
+    }
+}

@@ -1,0 +1,121 @@
+﻿@page "/post-todo"
+@inject HttpClient Http
+@inject IJSRuntime jsRuntime
+
+<link rel="stylesheet" href="css/post.css">
+
+<div class="container">
+    <h1>Create New Todo</h1>
+    <EditForm Model="@newTodo" OnValidSubmit="AddTodo">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="todoDay">Day</label>
+            <InputText id="todoDay" @bind-Value="newTodo.Day" required class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="todoNote">Note</label>
+            <InputText id="todoNote" @bind-Value="newTodo.Note" required class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="detailCount">Detail Count</label>
+            <InputNumber id="detailCount" @bind-Value="newTodo.DetailCount" required class="form-control" />
+        </div>
+
+        <div id="todoDetailsContainer" class="scrollable-area">
+            <label>Todo Details</label>
+            @foreach (var detail in newTodo.TodoDetails)
+            {
+                <div class="todoDetail">
+                    <div class="form-group">
+                        <label>Activity</label>
+                        <InputText @bind-Value="detail.Activity" class="form-control" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category</label>
+                        <InputText @bind-Value="detail.Category" class="form-control" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Detail Note</label>
+                        <InputTextArea @bind-Value="detail.DetailNote" rows="3" class="form-control" required />
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button type="button" class="btn btn-primary" @onclick="AddNewDetail">Add More Details</button>
+        <button type="submit" class="btn btn-success">Add Todo</button>
+    </EditForm>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3">@errorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success mt-3">@successMessage</div>
+    }
+</div>
+
+@code {
+    private Todo newTodo = new Todo { TodoDetails = new List<TodoDetail>() };
+    private string errorMessage;
+    private string successMessage;
+
+    private void AddNewDetail()
+    {
+        newTodo.TodoDetails.Add(new TodoDetail());
+    }
+
+    private async Task AddTodo()
+    {
+        try
+        {
+            var token = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "jwtToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7059/api/v1/todo");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                request.Content = JsonContent.Create(newTodo);
+
+                var response = await Http.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    successMessage = "Todo created successfully!";
+                    errorMessage = string.Empty;
+                    newTodo = new Todo { TodoDetails = new List<TodoDetail>() }; // Reset form
+                }
+                else
+                {
+                    errorMessage = "Failed to create todo.";
+                    successMessage = string.Empty;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+            successMessage = string.Empty;
+        }
+    }
+
+    public class Todo
+    {
+        public string Day { get; set; }
+        public string Note { get; set; }
+        public int DetailCount { get; set; }
+        public List<TodoDetail> TodoDetails { get; set; }
+    }
+
+    public class TodoDetail
+    {
+        public string Activity { get; set; }
+        public string Category { get; set; }
+        public string DetailNote { get; set; }
+    }
+}
